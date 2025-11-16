@@ -5,7 +5,7 @@ import { getUser } from "../utils/auth";
 const API = import.meta.env.VITE_API_URL;
 
 // Production socket connection
-const socket = io(API, { transports: ["websocket"] });
+const socket = io(API, { transports: ["websocket", "polling"] });
 
 export default function SeatMap({ tripId }) {
   const [seats, setSeats] = useState([]);

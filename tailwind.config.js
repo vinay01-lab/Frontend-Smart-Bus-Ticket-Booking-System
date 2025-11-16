@@ -1,4 +1,7 @@
 import DatePicker from "react-datepicker"
+/** @type {import('tailwindcss').Config} */
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker"
 
 export default {
   darkMode: "class",

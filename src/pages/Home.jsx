@@ -34,7 +34,7 @@ export default function Home() {
     loadTrips();
     loadRoutes();
 
-    socketRef.current = io(SOCKET_URL, { transports: ["websocket"], reconnectionAttempts: 5, reconnectionDelay: 1000 });
+    socketRef.current = io(SOCKET_URL, { transports: ["websocket", "polling"], reconnectionAttempts: 5, reconnectionDelay: 1000 });
 
     socketRef.current.on("booking_update", (payload) => {
       setOccupancyMap((prev) => ({
