@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
-const socket = io(API);
+const socket = io(import.meta.env.VITE_API_URL, {
+  transports: ["websocket"],
+});
+
 
 export default function SeatMap({ tripId }) {
   const [seats, setSeats] = useState([]);
@@ -39,7 +42,7 @@ export default function SeatMap({ tripId }) {
 
     const finalFare = getSeatPrice(seat.base_fare, seat.seat_type);
 
-    await fetch(`${API}/api/booking`, {
+    const res = await fetch(`${API}/api/booking`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -49,6 +52,14 @@ export default function SeatMap({ tripId }) {
         fare: finalFare,
       }),
     });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Seat booked!");
+    } else {
+      alert(data.error);
+    }
   };
 
   const getSeatPrice = (baseFare, seatType) => {

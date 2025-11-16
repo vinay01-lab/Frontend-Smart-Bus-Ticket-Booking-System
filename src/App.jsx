@@ -78,13 +78,31 @@ export default function App() {
         />
 
         <Route 
-        path="/trip/:tripId" 
-        element={
-          <ProtectedAdminRoute>
-            <TripDetails />
-          </ProtectedAdminRoute>
+          path="/trip/:tripId" 
+          element={
+            <ProtectedAdminRoute>
+              <TripDetails />
+            </ProtectedAdminRoute>
+          } 
+        />
+
+        <Route
+          path="/booking/:tripId"
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }     
+        />
+
+        <Route
+          path="/my-trips"
+          element={
+            <ProtectedRoute>
+              <MyTrips />
+            </ProtectedRoute>
         } 
-      />
+        />
 
       </Routes>
     </BrowserRouter>
