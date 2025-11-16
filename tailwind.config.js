@@ -1,11 +1,13 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {},
   },
-  plugins: [],
-  presets: [require("@tailwindcss/postcss")],
+  plugins: [
+    require("daisyui")
+  ],
 };
