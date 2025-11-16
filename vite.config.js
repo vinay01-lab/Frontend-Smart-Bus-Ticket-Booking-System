@@ -4,9 +4,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   css: {
-    lightningcss: false // FIXES THE TAILWIND @ RULE ERROR
-  },
-  build: {
-    outDir: "dist"
+    transformer: "postcss",   // force PostCSS only
+    postcss: "./postcss.config.js",
+    lightningcss: false       // disable lightningcss fully
   }
 });
