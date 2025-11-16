@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Booking from "./pages/Booking";
 import Navbar from "./components/Navbar";
@@ -11,19 +11,51 @@ import AddBus from "./pages/AddBus";
 import AddTrip from "./pages/AddTrip";
 import ViewTrips from "./pages/ViewTrips";
 import TripDetails from "./pages/TripDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import MyTrips from "./pages/MyTrips";
 
-export default function App() {
+function AppWrapper() {
+  const location = useLocation();
+
+  // Hide navbar ONLY on /admin pages
+  const hideNavbar = location.pathname.startsWith("/admin");
+
   return (
-    <BrowserRouter>
-      {window.location.pathname.startsWith("/admin") ? null : <Navbar />}
+    <>
+      {!hideNavbar && <Navbar />}
+
       <Routes>
+
+        {/* USER ROUTES */}
         <Route path="/" element={<Home />} />
-        <Route path="/booking/:tripId" element={<Booking />} />
+
+        <Route
+          path="/booking/:tripId"
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-trips"
+          element={
+            <ProtectedRoute>
+              <MyTrips />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* ADMIN ROUTES */}
         <Route path="/admin" element={<AdminLogin />} />
 
-        <Route 
+        <Route
           path="/admin/dashboard"
           element={
             <ProtectedAdminRoute>
@@ -31,24 +63,15 @@ export default function App() {
             </ProtectedAdminRoute>
           }
         />
-        
-        <Route 
-          path="/admin/layout"
-          element={
-            <ProtectedAdminRoute>
-              <AdminLayout />
-            </ProtectedAdminRoute>
-          }
-        />
 
-        <Route 
-          path="/admin/add-bus" 
+        <Route
+          path="/admin/add-bus"
           element={
             <ProtectedAdminRoute>
               <AddBus />
             </ProtectedAdminRoute>
           }
-          />
+        />
 
         <Route
           path="/admin/add-trip"
@@ -58,7 +81,7 @@ export default function App() {
             </ProtectedAdminRoute>
           }
         />
-    
+
         <Route
           path="/admin/view-trips"
           element={
@@ -68,8 +91,8 @@ export default function App() {
           }
         />
 
-        <Route 
-          path="/admin/view-buses" 
+        <Route
+          path="/admin/view-buses"
           element={
             <ProtectedAdminRoute>
               <ViewBuses />
@@ -77,34 +100,23 @@ export default function App() {
           }
         />
 
-        <Route 
-          path="/trip/:tripId" 
+        <Route
+          path="/trip/:tripId"
           element={
             <ProtectedAdminRoute>
               <TripDetails />
             </ProtectedAdminRoute>
-          } 
+          }
         />
-
-        <Route
-          path="/booking/:tripId"
-          element={
-            <ProtectedRoute>
-              <Booking />
-            </ProtectedRoute>
-          }     
-        />
-
-        <Route
-          path="/my-trips"
-          element={
-            <ProtectedRoute>
-              <MyTrips />
-            </ProtectedRoute>
-        } 
-        />
-
       </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppWrapper />
     </BrowserRouter>
   );
 }

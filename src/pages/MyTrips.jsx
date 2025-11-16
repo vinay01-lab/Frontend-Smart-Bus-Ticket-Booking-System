@@ -1,41 +1,40 @@
 import { useEffect, useState } from "react";
 import { getUser } from "../utils/auth";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API = import.meta.env.VITE_API_URL;
 
 export default function MyTrips() {
-  const [trips, setTrips] = useState([]);
+  const user = getUser();
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const user = getUser();
     if (!user) return;
 
-    fetch(`${API}/api/bookings/user/${user.id}`)
-      .then((r) => r.json())
-      .then(setTrips);
+    fetch(`${API}/api/booking/user/${user.id}`)
+      .then((res) => res.json())
+      .then((data) => setBookings(data))
+      .catch(() => {});
   }, []);
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">My Trips</h1>
 
-      {trips.length === 0 && (
-        <p className="text-gray-600">You have no bookings yet.</p>
+      {bookings.length === 0 && (
+        <p className="text-gray-600">No bookings yet.</p>
       )}
 
-      <div className="grid gap-4">
-        {trips.map((t) => (
-          <div key={t.id} className="bg-white p-4 rounded shadow">
-            <div className="flex justify-between">
-              <div>
-                <h2 className="font-bold">{t.route}</h2>
-                <div className="text-gray-500">{t.date} • {t.time}</div>
-              </div>
-              <div className="text-right">
-                <div>Seat: <b>{t.seat_no}</b></div>
-                <div>Paid: <b>₹{t.fare}</b></div>
-              </div>
-            </div>
+      <div className="space-y-4">
+        {bookings.map((b) => (
+          <div className="border p-4 rounded-lg shadow" key={b.id}>
+            <h2 className="font-bold text-lg">
+              {b.route}
+            </h2>
+
+            <p>Date: {b.date}</p>
+            <p>Time: {b.time}</p>
+            <p>Seat: {b.seat_no}</p>
+            <p>Fare Paid: ₹{b.fare}</p>
           </div>
         ))}
       </div>

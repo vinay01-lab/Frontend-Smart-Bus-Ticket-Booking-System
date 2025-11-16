@@ -1,22 +1,16 @@
-// src/utils/auth.js
-
-export function getUser() {
-  try {
-    return JSON.parse(localStorage.getItem("user")) || null;
-  } catch {
-    return null;
-  }
-}
-
-export function saveUser(user) {
+// Save logged-in user
+export const saveUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
-}
+};
 
-export function logoutUser() {
+// Get logged-in user
+export const getUser = () => {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+};
+
+// Logout
+export const logoutUser = () => {
   localStorage.removeItem("user");
-  window.location.href = "/login"; // redirect after logout
-}
-
-export function isLoggedIn() {
-  return !!getUser();
-}
+  window.location.href = "/login";
+};
